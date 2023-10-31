@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Donor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -116,4 +117,11 @@ class DonorController extends Controller
 
         return redirect()->route('donor.profile.profile', ['tab' => $redirectToTab])->with('message', 'Profile updated successfully.');
     }
+
+    public function list()
+    {
+        $orphanages = User::where('type', 3)->get();
+        return view('donor.orphanage.list', compact('orphanages'));
+    }
+    
 }

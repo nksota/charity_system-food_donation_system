@@ -39,7 +39,7 @@
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>#</th>
                     <th>Names</th>
                     <th>Registration complete?</th>
                     <th>Email</th>
@@ -49,7 +49,7 @@
                 @foreach ($admins as $admin)
                 <tbody>
                 <tr>
-                    <td>{{ $admin->id }}</td>
+                    <td>{{  $loop->iteration }}</td>
                     <td>{{ $admin->name }}</td>
                     <td>
                       <span class="badge badge-{{ $admin->status === 'yes' ? 'success' : 'warning' }} badge-md">

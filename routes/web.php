@@ -1,15 +1,23 @@
 <?php
 
+use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AAController;
 use App\Http\Controllers\DAController;
 use App\Http\Controllers\OAController;
 use App\Http\Controllers\VAController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DonorController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TwoFAController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\OrphanageController;
 use App\Http\Controllers\VolunteerController;
+use App\Http\Controllers\AdminDeliveryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +36,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('2fa', [TwoFAController::class, 'index'])->name('2fa.index');
+Route::post('2fa', [TwoFAController::class, 'store'])->name('2fa.post');
+Route::get('2fa/reset', [TwoFAController::class, 'resend'])->name('2fa.resend');
 
 /*------------------------------------------
 
@@ -41,7 +52,9 @@ All Volunteer Routes List
 
 Route::middleware(['auth', 'user-access:volunteer'])->group(function () {
 
-  
+    /**
+     * Complete profile
+     */
     Route::get('/volunteer/dashboard', [VolunteerController::class, 'index'])->name('volunteer.dashboard');
     Route::post('/volunteer/dashboard', [VolunteerController::class, 'store']);
 
@@ -55,6 +68,20 @@ Route::middleware(['auth', 'user-access:volunteer'])->group(function () {
     //update details in admins table
     Route::get('/volunteer/profile/profile', [VolunteerController::class, 'editProfile'])->name('volunteer.profile.profile');
     Route::put('/volunteer/profile/profile', [VolunteerController::class, 'updateProfile'])->name('volunteer.profile.update');
+
+    /*
+    Volunteer Delivery
+    */
+    Route::get('/volunteer/delivery', [DeliveryController::class, 'index'])->name('volunteer.delivery.index');
+    Route::get('/volunteer/delivery/pending', [DeliveryController::class, 'pending'])->name('volunteer.delivery.pending');
+    Route::get('/volunteer/delivery/confirmed', [DeliveryController::class, 'confirmed'])->name('volunteer.delivery.confirmed');
+    Route::get('/volunteer/delivery/dispatched', [DeliveryController::class, 'dispatched'])->name('volunteer.delivery.dispatched');
+    Route::get('/volunteer/delivery/delivered', [DeliveryController::class, 'delivered'])->name('volunteer.delivery.delivered');
+
+    // Edit volunteer status
+    Route::get('/volunteer/delivery/edit/{passport}', [DeliveryController::class, 'edit'])->name('volunteer.delivery.edit');
+    Route::put('/volunteer/delivery/{passport}', [DeliveryController::class, 'update'])->name('volunteer.delivery.update');
+   
 
 });
 
@@ -70,6 +97,9 @@ All Admin Routes List
 
 Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
+    /**
+     * Complete Profile
+     */
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/dashboard', [AdminController::class, 'store']);
 
@@ -116,6 +146,30 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::put('/admin/orphanage/{id}', [OAController::class, 'update'])->name('admin.orphanage.update');
     Route::get('admin/orphanage/{orphanage_id}/delete', [OAController::class, 'destroy']);
 
+    /**
+     * Donations CRUD
+     */
+
+     Route::get('admin/donations', [DonationController::class, 'index'])->name('donations.index');
+     Route::get('admin/donations/create', [DonationController::class, 'create'])->name('donations.create');
+     Route::post('admin/donations', [DonationController::class, 'store'])->name('donations.store');
+     Route::get('admin/donations/{donation}/edit', [DonationController::class, 'edit'])->name('donations.edit');
+     Route::put('admin/donations/{donation}', [DonationController::class, 'update'])->name('donations.update');
+     Route::delete('admin/donations/{donation}', [DonationController::class, 'destroy'])->name('donations.destroy');
+
+    /*
+    Order Delivery
+    */
+    Route::get('/admin/delivery', [AdminDeliveryController::class, 'index'])->name('admin.delivery.index');
+    Route::get('/admin/delivery/pending', [AdminDeliveryController::class, 'pending'])->name('admin.delivery.pending');
+    Route::get('/admin/delivery/confirmed', [AdminDeliveryController::class, 'confirmed'])->name('admin.delivery.confirmed');
+    Route::get('/admin/delivery/dispatched', [AdminDeliveryController::class, 'dispatched'])->name('admin.delivery.dispatched');
+    Route::get('/admin/delivery/delivered', [AdminDeliveryController::class, 'delivered'])->name('admin.delivery.delivered');
+    // Edit
+    Route::get('/admin/delivery/edit/{passport}', [AdminDeliveryController::class, 'edit'])->name('admin.delivery.edit');
+    Route::put('/admin/delivery/{passport}', [AdminDeliveryController::class, 'update'])->name('admin.delivery.update');
+   
+
 });
 
   
@@ -146,6 +200,19 @@ Route::middleware(['auth', 'user-access:donor'])->group(function () {
     Route::get('/donor/profile/profile', [DonorController::class, 'editProfile'])->name('donor.profile.profile');
     Route::put('/donor/profile/profile', [DonorController::class, 'updateProfile'])->name('donor.profile.update');
 
+      /**
+     * Donations CRUD
+     */
+
+     Route::get('donor/donations', [DonationController::class, 'indexD'])->name('donor.donations.index');
+     Route::get('donor/donations/create', [DonationController::class, 'createD'])->name('donor.donations.create');
+     Route::post('donor/donations', [DonationController::class, 'storeD'])->name('donor.donations.store');
+     Route::get('donor/donations/{donation}/edit', [DonationController::class, 'editD'])->name('donor.donations.edit');
+     Route::put('donor/donations/{donation}', [DonationController::class, 'updateD'])->name('donor.donations.update');
+     Route::delete('donor/donations/{donation}', [DonationController::class, 'destroyD'])->name('donor.donations.destroy');
+
+     //Orphanage
+    Route::get('/donor/orphanage/list', [DonorController::class, 'list'])->name('donor.orphanage.list');
 });
 
 
@@ -174,6 +241,32 @@ Route::middleware(['auth', 'user-access:orphanage'])->group(function () {
     //update details in admins table
     Route::get('/orphanage/profile/profile', [OrphanageController::class, 'editProfile'])->name('orphanage.profile.profile');
     Route::put('/orphanage/profile/profile', [OrphanageController::class, 'updateProfile'])->name('orphanage.profile.update');
+
+    /**
+     * Donations Display
+     */
+    // Display a list of donations
+    Route::get('/orphanage/donations', [DonationController::class, 'indexO'])->name('donations.index');
+
+    // View a specific donation
+    Route::get('/orphanage/donations/{id}', [DonationController::class, 'viewO'])->name('donations.view');
+    // Add a donation to the cart
+    Route::post('/donations/{donation}/add-to-cart', [DonationController::class, 'addToCart'])->name('donations.add-to-cart');
+ 
+
+    // Routes for managing the cart
+    Route::get('/orphanage/cart', [CartController::class, 'index'])->name('orphanage.cart.cart');
+    Route::post('/orphanage/cart/add/{donation_id}', [CartController::class, 'addToCart'])->name('orphanage.cart.add');
+    Route::get('/orphanage/cart/view', [CartController::class, 'viewCart'])->name('orphanage.cart.view');
+    Route::delete('/orphanage/cart/remove/{donation}', [CartController::class, 'removeFromCart'])->name('orphanage.cart.remove');
+    
+    //Checkout routes
+    Route::get('/orphanage/checkout', [CheckoutController::class, 'index'])->name('orphanage.checkout');
+    Route::post('/orphanage/checkout', [CheckoutController::class, 'processCheckout'])->name('orphanage.checkout.process');
+
+    //Orders
+    Route::get('/orphanage/orders', [OrderController::class, 'index'])->name('orphanage.orders');
+
 
 });
 

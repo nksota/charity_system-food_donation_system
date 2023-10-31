@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use App\Models\UserCode;
 
 class LoginController extends Controller
 {
@@ -41,55 +42,23 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-
     {   
-
-        $input = $request->all();
-
-     
-
-        $this->validate($request, [
-
-            'email' => 'required|email',
-
+      
+        $request->validate([
+            'email' => 'required',
             'password' => 'required',
-
         ]);
-
      
-        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
-        {
-            $user = Auth::user();
-
-            if ($user->status === 'no') {
-                // Registration is incomplete, redirect to the respective complete registration page
-                if ($user->type === 'admin') {
-                    return redirect()->route('admin.dashboard');
-                } else if ($user->type === 'donor') {
-                    return redirect()->route('donor.dashboard');
-                }
-                else if ($user->type === 'volunteer') {
-                    return redirect()->route('volunteer.dashboard');
-                }
-                else if ($user->type === 'orphanage') {
-                    return redirect()->route('orphanage.dashboard');
-                }
-            } else {
-
-            if (auth()->user()->type == 'admin') {
-                return redirect()->route('admin.home');
-            }else if (auth()->user()->type == 'donor') {
-                return redirect()->route('donor.home');
-            }else if (auth()->user()->type == 'orphanage') {
-                return redirect()->route('orphanage.home');
-            }else{
-                return redirect()->route('home');
-            }
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+  
+            auth()->user()->generateCode();
+  
+            return redirect()->route('2fa.index');
         }
-        }else{
-            return redirect()->route('login')
-                ->with('error','Email-Address And Password Are Wrong.');
-        }
+    
+        return redirect()->route('login')
+            ->with('error', 'Email-Address And Password Are Wrong.');
     }
     
 }

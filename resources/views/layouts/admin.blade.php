@@ -115,6 +115,22 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ url('admin/donations') }}" class="nav-link {{ Request::is('admin/donations') ? 'active':'' }}">
+              <i class="nav-icon fa-solid fa-circle-dollar-to-slot"></i>
+              <p>
+                Donations
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('admin/delivery') }}" class="nav-link {{ Request::is('admin/delivery') ? 'active':'' }}">
+              <i class="nav-icon fa-solid fa-cart-shopping"></i>
+              <p>
+                Donation Orders
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('admin/admin/list') }}" class="nav-link {{ Request::is('admin/admin/list') ? 'active':'' }}">
               <i class="nav-icon fas fa-user-lock"></i>
               <p>
@@ -146,6 +162,14 @@
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="{{ url('chatify') }}" class="nav-link {{ Request::is('chatify') ? 'active':'' }}">
+              <i class="fas fa-comments nav-icon"></i>
+              <p>Chats</p>
+            </a>
+          </li>
+
           <li class="nav-item">
             <a href="{{ route('logout') }}" class="nav-link">
               <i class="nav-icon fa-solid fa-right-from-bracket"></i>

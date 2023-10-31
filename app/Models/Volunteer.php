@@ -26,4 +26,10 @@ class Volunteer extends Model
           {
               return $this->belongsTo(User::class, 'user_id', 'id');
           }
+
+          public function orders()
+        {
+            return $this->hasMany(Order::class, 'volunteer_id');
+        }
+
 }

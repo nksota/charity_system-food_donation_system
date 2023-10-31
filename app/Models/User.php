@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Exception;
 use App\Models\Admin;
 use App\Models\Donor;
 use App\Models\Orphanage;
 use App\Models\Volunteer;
+use App\Mail\SendCodeMail;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -79,6 +82,38 @@ class User extends Authenticatable
     public function orphanages()
     {
         return $this->hasMany(Orphanage::class);
+    }
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+ /**
+     * Write code on Method
+     *
+     * @return response()
+     */
+    public function generateCode()
+    {
+        $code = rand(1000, 9999);
+  
+        UserCode::updateOrCreate(
+            [ 'user_id' => auth()->user()->id ],
+            [ 'code' => $code ]
+        );
+    
+        try {
+  
+            $details = [
+                'title' => 'Mail from Charity',
+                'code' => $code
+            ];
+             
+            Mail::to(auth()->user()->email)->send(new SendCodeMail($details));
+    
+        } catch (Exception $e) {
+            info("Error: ". $e->getMessage());
+        }
     }
 
 }

@@ -115,6 +115,20 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ url('volunteer/delivery') }}" class="nav-link {{ Request::is('volunteer/delivery') ? 'active':'' }}">
+              <i class="nav-icon fa-solid fa-cart-shopping"></i>
+              <p>
+                My Deliveries
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('chatify') }}" class="nav-link {{ Request::is('chatify') ? 'active':'' }}">
+              <i class="fas fa-comments nav-icon"></i>
+              <p>Chats</p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ route('logout') }}" class="nav-link">
               <i class="nav-icon fa-solid fa-right-from-bracket"></i>
               <p>
