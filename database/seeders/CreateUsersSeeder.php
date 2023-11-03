@@ -19,7 +19,7 @@ class CreateUsersSeeder extends Seeder
     
                'name'=>'Admin',
     
-               'email'=>'admin@charity.com',
+               'email'=>'wawundii.25@gmail.com',
     
                'type'=>1,
 
