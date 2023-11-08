@@ -19,7 +19,7 @@ class CreateUsersSeeder extends Seeder
     
                'name'=>'Admin',
     
-               'email'=>'admin@charity.com',
+               'email'=>'wawundii.25@cgmail.com',
     
                'type'=>1,
 
@@ -33,7 +33,7 @@ class CreateUsersSeeder extends Seeder
     
                'name'=>'donor',
     
-               'email'=>'donor@charity.com',
+               'email'=>'nsota25@gmail.com',
     
                'type'=> 2,
 
@@ -47,7 +47,7 @@ class CreateUsersSeeder extends Seeder
     
                 'name'=>'Orphanage',
      
-                'email'=>'orphanage@charity.com',
+                'email'=>'sotakelly3@gmail.com',
      
                 'type'=> 3,
 
@@ -61,7 +61,7 @@ class CreateUsersSeeder extends Seeder
     
                'name'=>'Volunteer',
     
-               'email'=>'volunteer@charity.com',
+               'email'=>'noella.sota@strathmore.edu',
     
                'type'=>0,
 
