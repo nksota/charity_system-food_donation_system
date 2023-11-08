@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Donation;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,8 +27,13 @@ class HomeController extends Controller
     public function index()
 
     {
+        $volunteer = auth()->user();
 
-        return view('home');
+        // Retrieve orders that belong to the volunteer based on volunteer_id
+        $volunteerOrders = Order::where('volunteer_id', $volunteer->id)->get();
+        $orderCount = Order::where('volunteer_id', $volunteer->id)->count();
+
+        return view('home', compact('volunteerOrders', 'orderCount'));
 
     } 
 
@@ -44,8 +52,12 @@ class HomeController extends Controller
     public function adminHome()
 
     {
+        $latestOrders = Order::latest()->limit(10)->get();
+        $orderCount = Order::count();
+        $userCount = User::count();
+        $donationCount = Donation::count();
 
-        return view('adminHome');
+        return view('adminHome', compact('orderCount', 'userCount', 'donationCount', 'latestOrders'));
 
     }
 
@@ -64,8 +76,11 @@ class HomeController extends Controller
     public function donorHome()
 
     {
+        $user = auth()->user();
+        $userCount = User::where('type', 3)->count();
+        $donationCount = Donation::where('user_id', $user->id)->count();
 
-        return view('donorHome');
+        return view('donorHome', compact('userCount', 'donationCount'));
 
     }
 
@@ -83,8 +98,13 @@ class HomeController extends Controller
      public function orphanageHome()
 
      {
- 
-         return view('orphanageHome');
+         // Get the currently authenticated user (volunteer)
+         $volunteer = auth()->user();
+
+         // Count the orders that belong to the volunteer based on volunteer_id
+         $orderCount = Order::where('user_id', $volunteer->id)->count();
+         $donationCount = Donation::count();
+         return view('orphanageHome', compact('orderCount', 'donationCount'));
  
      }
 
