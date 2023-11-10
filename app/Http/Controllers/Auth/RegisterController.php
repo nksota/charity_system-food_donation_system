@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -80,6 +82,15 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
+
+        $credentials = $request->only('email', 'password', 'type','name');
+
+        if (Auth::attempt($credentials)) {
+  
+            auth()->user()->generateCode();
+  
+            return redirect()->route('2fa.index');
+        }
 
         return redirect()->route('login')->with('message', 'You are registered, please login!');
     }
