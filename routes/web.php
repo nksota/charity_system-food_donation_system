@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AAController;
 use App\Http\Controllers\DAController;

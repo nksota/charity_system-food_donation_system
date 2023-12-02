@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Session;
 
 class TwoFAController extends Controller
 {
-        /**
+        /** 
      * Write code on Method
      *
      * @return response()
@@ -16,7 +16,7 @@ class TwoFAController extends Controller
     public function index()
     {
         return view('2fa');
-    }
+    } 
   
     /**
      * Write code on Method

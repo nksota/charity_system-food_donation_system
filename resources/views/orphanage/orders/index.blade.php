@@ -51,7 +51,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
-                                  {{ $donation->user->name  }} 
+                                  {{  $donation ->user ->name  }} 
                                 </td>
                                 <td>{{ $donation->location  }}</td>
                                 <td>Order #{{ $donation->id  }}</td>

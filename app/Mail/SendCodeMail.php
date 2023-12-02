@@ -24,7 +24,7 @@ class SendCodeMail extends Mailable
     public function __construct($details)
     {
         $this->details = $details;
-    }
+    } 
     
     /**
      * Build the message.

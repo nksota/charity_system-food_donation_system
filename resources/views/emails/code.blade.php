@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Charity</title>
-</head>
+</head> 
 <body>
     <h1>{{ $details['title'] }}</h1>
     <p>Your code is : {{ $details['code'] }}</p>
